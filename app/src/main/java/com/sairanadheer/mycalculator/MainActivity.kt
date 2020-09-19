@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.textview.MaterialTextView
 import com.sairanadheer.mycalculator.adapters.CalculatorButtonsAdapter
 import com.sairanadheer.mycalculator.databinding.ActivityMainBinding
 
@@ -12,7 +13,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var calculatorButtons: RecyclerView
-    private lateinit var equation: AppCompatTextView
+    private lateinit var equation: MaterialTextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

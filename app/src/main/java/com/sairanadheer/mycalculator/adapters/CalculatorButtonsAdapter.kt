@@ -7,14 +7,16 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.card.MaterialCardView
+import com.google.android.material.textview.MaterialTextView
 import com.sairanadheer.mycalculator.R
 
-class CalculatorButtonsAdapter(context: Context, data: List<String>, equation: AppCompatTextView) :
+class CalculatorButtonsAdapter(context: Context, data: List<String>, equation: MaterialTextView) :
     RecyclerView.Adapter<CalculatorButtonsAdapter.CalculatorButtonsViewHolder>() {
 
     private val mData: List<String> = data
     private val mContext: Context = context
-    private val mEquation: AppCompatTextView = equation
+    private val mEquation: MaterialTextView = equation
     private var mEquationValue: StringBuilder = StringBuilder()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CalculatorButtonsViewHolder {
@@ -37,8 +39,8 @@ class CalculatorButtonsAdapter(context: Context, data: List<String>, equation: A
 
     class CalculatorButtonsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        var buttonValue: AppCompatTextView
-        var buttonCard: CardView
+        var buttonValue: MaterialTextView
+        var buttonCard: MaterialCardView
 
         init {
             buttonValue = itemView.findViewById(R.id.button_value)

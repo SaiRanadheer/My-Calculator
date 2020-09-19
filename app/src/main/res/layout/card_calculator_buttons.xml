@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/button_card"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginLeft="@dimen/dimen8dp"
-    android:layout_marginRight="@dimen/dimen8dp"
     android:layout_marginTop="@dimen/dimen16dp"
+    android:layout_marginRight="@dimen/dimen8dp"
     app:cardBackgroundColor="@android:color/transparent"
     app:cardCornerRadius="@dimen/dimen25dp">
 
@@ -13,10 +14,10 @@
         android:id="@+id/button_value"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAlignment="center"
+        android:background="@drawable/button_borders"
+        android:gravity="center_horizontal"
         android:paddingHorizontal="@dimen/dimen5dp"
         android:paddingVertical="@dimen/dimen5dp"
-        android:background="@drawable/button_borders"
-        android:gravity="center_horizontal" />
+        android:textAlignment="center" />
 
 </androidx.cardview.widget.CardView>

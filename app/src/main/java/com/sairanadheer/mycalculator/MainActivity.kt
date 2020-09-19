@@ -2,6 +2,7 @@ package com.sairanadheer.mycalculator
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.widget.AppCompatTextView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.sairanadheer.mycalculator.adapters.CalculatorButtonsAdapter
@@ -11,6 +12,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var calculatorButtons: RecyclerView
+    private lateinit var equation: AppCompatTextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,11 +25,12 @@ class MainActivity : AppCompatActivity() {
 
     private fun initializeData() {
         val data = arrayListOf("C", "()", "%", "/", "7", "8", "9", "x", "4", "5", "6", "-", "1", "2", "3", "+", "+/-", "0", ".", "=")
-        val adapter = CalculatorButtonsAdapter(this, data)
+        val adapter = CalculatorButtonsAdapter(this, data, equation)
         calculatorButtons.adapter = adapter
     }
 
     private fun configureViewElements() {
+        equation = binding.equation
         calculatorButtons = binding.calculatorButtons
         calculatorButtons.setHasFixedSize(true)
         calculatorButtons.layoutManager = GridLayoutManager(this, 4)

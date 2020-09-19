@@ -2,20 +2,21 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="@dimen/dimen8dp"
+    android:layout_marginRight="@dimen/dimen8dp"
+    android:layout_marginTop="@dimen/dimen16dp"
+    app:cardBackgroundColor="@android:color/transparent"
+    app:cardCornerRadius="@dimen/dimen25dp">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/button_value"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/button_value"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:paddingHorizontal="@dimen/dimen5dp"
+        android:paddingVertical="@dimen/dimen5dp"
+        android:background="@drawable/button_borders"
+        android:gravity="center_horizontal" />
 
 </androidx.cardview.widget.CardView>

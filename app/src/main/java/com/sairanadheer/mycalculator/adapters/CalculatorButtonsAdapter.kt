@@ -1,11 +1,14 @@
 package com.sairanadheer.mycalculator.adapters
 
 import android.content.Context
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.cardview.widget.CardView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.textview.MaterialTextView
@@ -25,10 +28,22 @@ class CalculatorButtonsAdapter(context: Context, data: List<String>, equation: M
         return CalculatorButtonsViewHolder(view)
     }
 
+
     override fun onBindViewHolder(holder: CalculatorButtonsViewHolder, position: Int) {
+        if(position == 0){
+            if(Build.VERSION.SDK_INT >= 23) {
+                holder.buttonValue.setTextColor(mContext.getColor(R.color.crimson))
+            } else {
+                holder.buttonValue.setTextColor(ContextCompat.getColor(mContext, R.color.crimson))
+            }
+        }
         holder.buttonValue.setText(mData.get(position))
         holder.buttonCard.setOnClickListener {
-            mEquationValue.append(holder.buttonValue.text)
+            if(position == 0){
+                mEquationValue.clear();
+            } else {
+                mEquationValue.append(holder.buttonValue.text)
+            }
             mEquation.setText(mEquationValue)
         }
     }

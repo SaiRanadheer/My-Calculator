@@ -18,6 +18,10 @@
         android:gravity="center_horizontal"
         android:paddingHorizontal="@dimen/dimen5dp"
         android:paddingVertical="@dimen/dimen5dp"
-        android:textAlignment="center" />
+        android:textAlignment="center"
+        app:fontFamily="@font/roboto_light"
+        android:textSize="30sp"
+        android:textColor="@android:color/black"
+        />
 
 </com.google.android.material.card.MaterialCardView>

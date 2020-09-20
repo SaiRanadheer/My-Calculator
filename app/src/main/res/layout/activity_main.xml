@@ -14,7 +14,9 @@
       android:layout_height="wrap_content"
       android:gravity="end"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintTop_toTopOf="parent"/>
+      app:layout_constraintTop_toTopOf="parent"
+      app:fontFamily="@font/roboto_light"
+      android:textSize="@dimen/dimen30sp"/>
 
   <com.google.android.material.textview.MaterialTextView
       android:id="@+id/equation"
@@ -22,7 +24,9 @@
       android:layout_height="wrap_content"
       android:gravity="end"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintTop_toBottomOf="@id/result"/>
+      app:layout_constraintTop_toBottomOf="@id/result"
+      app:fontFamily="@font/roboto_light"
+      android:textSize="@dimen/dimen30sp"/>
 
   <androidx.recyclerview.widget.RecyclerView
       android:id="@+id/calculator_buttons"

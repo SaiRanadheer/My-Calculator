@@ -12,8 +12,14 @@ import com.google.android.material.card.MaterialCardView
 import com.google.android.material.textview.MaterialTextView
 import com.sairanadheer.mycalculator.R
 import org.mariuszgromada.math.mxparser.Expression
+import java.lang.NumberFormatException
 
-class CalculatorButtonsAdapter(context: Context, data: List<String>, equation: MaterialTextView, result: MaterialTextView) :
+class CalculatorButtonsAdapter(
+    context: Context,
+    data: List<String>,
+    equation: MaterialTextView,
+    result: MaterialTextView
+) :
     RecyclerView.Adapter<CalculatorButtonsAdapter.CalculatorButtonsViewHolder>() {
 
     private val mData: List<String> = data
@@ -21,6 +27,9 @@ class CalculatorButtonsAdapter(context: Context, data: List<String>, equation: M
     private val mEquation: MaterialTextView = equation
     private val mResult: MaterialTextView = result
     private var mEquationValue: StringBuilder = StringBuilder()
+
+    private var isBracketOpen = false
+    private var bracketsOpenCount = 0
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CalculatorButtonsViewHolder {
         val view =
@@ -30,42 +39,88 @@ class CalculatorButtonsAdapter(context: Context, data: List<String>, equation: M
 
 
     override fun onBindViewHolder(holder: CalculatorButtonsViewHolder, position: Int) {
-        if(position == 0){
-            if(Build.VERSION.SDK_INT >= 23) {
-                holder.buttonValue.setTextColor(mContext.getColor(R.color.crimson))
-            } else {
-                holder.buttonValue.setTextColor(ContextCompat.getColor(mContext, R.color.crimson))
-            }
+        if (position == 0) {
+            configureClearButton(holder)
         }
         holder.buttonValue.text = mData[position]
         holder.buttonCard.setOnClickListener {
-            if(position == 0){
-                mEquationValue.clear()
+            if (position == 0) {
+                clearButtonFunctionality()
+            } else if (position == 1) {
+                parenthesisFunctionality()
             } else {
                 mEquationValue.append(holder.buttonValue.text as String)
             }
             mEquation.text = mEquationValue
-            if(!TextUtils.isEmpty(mEquationValue)){
-                val expressionValue = replaceAll()
-                val expression = Expression(expressionValue.toString())
-                val calculatedValue = expression.calculate()
-                when(calculatedValue.isNaN()){
+            if (!TextUtils.isEmpty(mEquationValue)) {
+                val calculatedValue = Expression(replaceAll()).calculate()
+                when (calculatedValue.isNaN()) {
                     true -> mResult.text = ""
-                    false -> mResult.text = calculatedValue.toString()
+                    false -> {
+                        if (!calculatedValue.rem(1).equals(0.0)) {
+                            mResult.text = calculatedValue.toString()
+                        } else {
+                            mResult.text = calculatedValue.toInt().toString()
+                        }
+                    }
                 }
             }
         }
     }
 
-    private fun replaceAll(): StringBuilder {
+    private fun parenthesisFunctionality() {
+        try {
+            Integer.parseInt(mEquationValue.get(mEquationValue.length - 1).toString())
+            if (isBracketOpen) {
+                mEquationValue.append(")")
+                if (--bracketsOpenCount == 0) {
+                    isBracketOpen = false
+                }
+            } else {
+                mEquationValue.append("x(")
+                isBracketOpen = true
+                bracketsOpenCount++
+            }
+        } catch (e: NumberFormatException) {
+            if (mEquationValue.get(mEquationValue.length - 1).toString()
+                    .equals(")") && isBracketOpen
+            ) {
+                mEquationValue.append(")")
+                if (--bracketsOpenCount == 0) {
+                    isBracketOpen = false
+                }
+            } else {
+                mEquationValue.append("(")
+                isBracketOpen = true
+                bracketsOpenCount++
+            }
+        }
+    }
+
+    private fun clearButtonFunctionality() {
+        mEquationValue.clear()
+        mResult.text = ""
+        isBracketOpen = false
+        bracketsOpenCount = 0
+    }
+
+    private fun configureClearButton(holder: CalculatorButtonsViewHolder) {
+        if (Build.VERSION.SDK_INT >= 23) {
+            holder.buttonValue.setTextColor(mContext.getColor(R.color.crimson))
+        } else {
+            holder.buttonValue.setTextColor(ContextCompat.getColor(mContext, R.color.crimson))
+        }
+    }
+
+    private fun replaceAll(): String {
         var index = mEquationValue.indexOf("x")
         val replacedEquation = StringBuilder(mEquationValue)
-        while(index != -1){
+        while (index != -1) {
             replacedEquation.replace(index, index + 1, "*")
             index++
             index = replacedEquation.indexOf("x", index)
         }
-        return replacedEquation
+        return replacedEquation.toString()
     }
 
     override fun getItemCount(): Int {

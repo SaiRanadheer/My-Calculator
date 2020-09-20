@@ -20,7 +20,7 @@
         android:paddingVertical="@dimen/dimen5dp"
         android:textAlignment="center"
         app:fontFamily="@font/roboto_light"
-        android:textSize="30sp"
+        android:textSize="@dimen/dimen30sp"
         android:textColor="@android:color/black"
         />
 

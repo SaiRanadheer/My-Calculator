@@ -48,52 +48,72 @@ class CalculatorButtonsAdapter(
                 clearButtonFunctionality()
             } else if (position == 1) {
                 parenthesisFunctionality()
+            } else if (position == mData.size - 1) {
+                if (!TextUtils.isEmpty(mEquationValue)) {
+                    mEquationValue.deleteCharAt(mEquationValue.length - 1)
+                }
             } else {
                 mEquationValue.append(holder.buttonValue.text as String)
             }
             mEquation.text = mEquationValue
-            if (!TextUtils.isEmpty(mEquationValue)) {
-                val calculatedValue = Expression(replaceAll()).calculate()
-                when (calculatedValue.isNaN()) {
-                    true -> mResult.text = ""
-                    false -> {
-                        if (!calculatedValue.rem(1).equals(0.0)) {
-                            mResult.text = calculatedValue.toString()
-                        } else {
-                            mResult.text = calculatedValue.toInt().toString()
-                        }
+            calculateResult()
+
+        }
+    }
+
+    private fun calculateResult() {
+        if (!TextUtils.isEmpty(mEquationValue)) {
+            val calculatedValue = Expression(replaceAll()).calculate()
+            when (calculatedValue.isNaN()) {
+                true -> mResult.text = ""
+                false -> {
+                    if (!calculatedValue.rem(1).equals(0.0)) {
+                        mResult.text = calculatedValue.toString()
+                    } else {
+                        mResult.text = calculatedValue.toInt().toString()
                     }
                 }
             }
+        } else {
+            mResult.text = ""
         }
     }
 
     private fun parenthesisFunctionality() {
         try {
-            Integer.parseInt(mEquationValue.get(mEquationValue.length - 1).toString())
-            if (isBracketOpen) {
-                mEquationValue.append(")")
-                if (--bracketsOpenCount == 0) {
-                    isBracketOpen = false
-                }
-            } else {
-                mEquationValue.append("x(")
+            if (TextUtils.isEmpty(mEquationValue)) {
+                mEquationValue.append("(")
                 isBracketOpen = true
                 bracketsOpenCount++
+            } else {
+                Integer.parseInt(mEquationValue.get(mEquationValue.length - 1).toString())
+                if (isBracketOpen) {
+                    mEquationValue.append(")")
+                    updateOpenBracketsCount()
+
+                } else {
+                    mEquationValue.append("x(")
+                    isBracketOpen = true
+                    bracketsOpenCount++
+                }
             }
         } catch (e: NumberFormatException) {
             if (mEquationValue.get(mEquationValue.length - 1).toString()
                     .equals(")") && isBracketOpen
             ) {
                 mEquationValue.append(")")
-                if (--bracketsOpenCount == 0) {
-                    isBracketOpen = false
-                }
+                updateOpenBracketsCount()
             } else {
                 mEquationValue.append("(")
                 isBracketOpen = true
                 bracketsOpenCount++
             }
+        }
+    }
+
+    private fun updateOpenBracketsCount() {
+        if (--bracketsOpenCount == 0) {
+            isBracketOpen = false
         }
     }
 

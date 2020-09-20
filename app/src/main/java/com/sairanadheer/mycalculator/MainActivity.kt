@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initializeData() {
-        val data = arrayListOf("C", "()", "%", "/", "7", "8", "9", "x", "4", "5", "6", "-", "1", "2", "3", "+", "+/-", "0", ".", "=")
+        val data = arrayListOf("C", "()", "%", "/", "7", "8", "9", "x", "4", "5", "6", "-", "1", "2", "3", "+", "+/-", "0", ".", "<-")
         val adapter = CalculatorButtonsAdapter(this, data, equation, result)
         calculatorButtons.adapter = adapter
     }

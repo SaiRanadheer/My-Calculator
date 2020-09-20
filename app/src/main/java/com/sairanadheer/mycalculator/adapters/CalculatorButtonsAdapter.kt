@@ -56,26 +56,26 @@ class CalculatorButtonsAdapter(
                 mEquationValue.append(holder.buttonValue.text as String)
             }
             mEquation.text = mEquationValue
-            calculateResult()
+            mResult.text = calculateResult()
 
         }
     }
 
-    private fun calculateResult() {
+    private fun calculateResult(): String {
         if (!TextUtils.isEmpty(mEquationValue)) {
             val calculatedValue = Expression(replaceAll()).calculate()
             when (calculatedValue.isNaN()) {
-                true -> mResult.text = ""
+                true -> return ""
                 false -> {
                     if (!calculatedValue.rem(1).equals(0.0)) {
-                        mResult.text = calculatedValue.toString()
+                        return calculatedValue.toString()
                     } else {
-                        mResult.text = calculatedValue.toInt().toString()
+                        return calculatedValue.toInt().toString()
                     }
                 }
             }
         } else {
-            mResult.text = ""
+            return ""
         }
     }
 
@@ -98,11 +98,15 @@ class CalculatorButtonsAdapter(
                 }
             }
         } catch (e: NumberFormatException) {
-            if (mEquationValue.get(mEquationValue.length - 1).toString()
-                    .equals(")") && isBracketOpen
-            ) {
-                mEquationValue.append(")")
-                updateOpenBracketsCount()
+            if (mEquationValue.get(mEquationValue.length - 1).toString().equals(")")) {
+                if (isBracketOpen) {
+                    mEquationValue.append(")")
+                    updateOpenBracketsCount()
+                } else {
+                    mEquationValue.append("x(")
+                    isBracketOpen = true
+                    bracketsOpenCount++
+                }
             } else {
                 mEquationValue.append("(")
                 isBracketOpen = true

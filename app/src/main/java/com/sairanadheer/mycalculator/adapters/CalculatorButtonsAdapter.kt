@@ -87,31 +87,29 @@ class CalculatorButtonsAdapter(
                 bracketsOpenCount++
             } else {
                 Integer.parseInt(mEquationValue.get(mEquationValue.length - 1).toString())
-                if (isBracketOpen) {
-                    mEquationValue.append(")")
-                    updateOpenBracketsCount()
+                openParanthesisCheck()
 
-                } else {
-                    mEquationValue.append("x(")
-                    isBracketOpen = true
-                    bracketsOpenCount++
-                }
             }
         } catch (e: NumberFormatException) {
             if (mEquationValue.get(mEquationValue.length - 1).toString().equals(")")) {
-                if (isBracketOpen) {
-                    mEquationValue.append(")")
-                    updateOpenBracketsCount()
-                } else {
-                    mEquationValue.append("x(")
-                    isBracketOpen = true
-                    bracketsOpenCount++
-                }
+                openParanthesisCheck()
             } else {
                 mEquationValue.append("(")
                 isBracketOpen = true
                 bracketsOpenCount++
             }
+        }
+    }
+
+    private fun openParanthesisCheck() {
+        if (isBracketOpen) {
+            mEquationValue.append(")")
+            updateOpenBracketsCount()
+
+        } else {
+            mEquationValue.append("x(")
+            isBracketOpen = true
+            bracketsOpenCount++
         }
     }
 

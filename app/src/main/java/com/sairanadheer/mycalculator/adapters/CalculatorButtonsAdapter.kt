@@ -6,6 +6,7 @@ import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
@@ -53,7 +54,10 @@ class CalculatorButtonsAdapter(
                     mEquationValue.deleteCharAt(mEquationValue.length - 1)
                 }
             } else {
-                mEquationValue.append(holder.buttonValue.text as String)
+                if(formatIsValid(position)){
+                    mEquationValue.append(holder.buttonValue.text as String)
+                }
+
             }
             mEquation.text = mEquationValue
             mResult.text = calculateResult()
@@ -61,21 +65,69 @@ class CalculatorButtonsAdapter(
         }
     }
 
+    private fun formatIsValid(position: Int): Boolean {
+        val addSubOperators = arrayListOf("+", "-")
+        val divMulOperators = arrayListOf("x", "%", "/")
+        if(divMulOperators.contains(mData[position])) {
+            return divMulOperatorsFormat()
+
+        } else if(addSubOperators.contains(mData[position])) {
+            return addSubOperatorsFormat()
+        }
+        return true
+    }
+
+    private fun addSubOperatorsFormat(): Boolean {
+        val operators = arrayListOf("+", "-", "x", "/", "%")
+        return if (!TextUtils.isEmpty(mEquationValue)) {
+            val lastCharacter = mEquationValue[mEquationValue.length - 1]
+            if(operators.contains(lastCharacter.toString())) {
+                mEquationValue.deleteCharAt(mEquationValue.length - 1)
+            }
+            true
+        } else {
+            invalidFormatToast()
+        }
+    }
+
+    private fun divMulOperatorsFormat(): Boolean {
+        val operators = arrayListOf("+", "-", "x", "/", "%")
+        return if (!TextUtils.isEmpty(mEquationValue)) {
+            val lastCharacter = mEquationValue[mEquationValue.length - 1]
+            if (lastCharacter == '(') {
+                return invalidFormatToast()
+            } else if(operators.contains(lastCharacter.toString())) {
+                mEquationValue.deleteCharAt(mEquationValue.length - 1)
+                if(mEquationValue[mEquationValue.length - 1] == '('){
+                    return invalidFormatToast()
+                }
+            }
+            true
+        } else {
+            invalidFormatToast()
+        }
+    }
+
+    private fun invalidFormatToast(): Boolean {
+        Toast.makeText(mContext, "Invalid format", Toast.LENGTH_LONG).show()
+        return false
+    }
+
     private fun calculateResult(): String {
-        if (!TextUtils.isEmpty(mEquationValue)) {
+        return if (!TextUtils.isEmpty(mEquationValue)) {
             val calculatedValue = Expression(replaceAll()).calculate()
             when (calculatedValue.isNaN()) {
-                true -> return ""
+                true -> ""
                 false -> {
                     if (!calculatedValue.rem(1).equals(0.0)) {
-                        return calculatedValue.toString()
+                        calculatedValue.toString()
                     } else {
-                        return calculatedValue.toInt().toString()
+                        calculatedValue.toInt().toString()
                     }
                 }
             }
         } else {
-            return ""
+            ""
         }
     }
 
@@ -86,13 +138,13 @@ class CalculatorButtonsAdapter(
                 isBracketOpen = true
                 bracketsOpenCount++
             } else {
-                Integer.parseInt(mEquationValue.get(mEquationValue.length - 1).toString())
-                openParanthesisCheck()
+                Integer.parseInt(mEquationValue[mEquationValue.length - 1].toString())
+                openParenthesisCheck()
 
             }
         } catch (e: NumberFormatException) {
-            if (mEquationValue.get(mEquationValue.length - 1).toString().equals(")")) {
-                openParanthesisCheck()
+            if (mEquationValue[mEquationValue.length - 1] == ')') {
+                openParenthesisCheck()
             } else {
                 mEquationValue.append("(")
                 isBracketOpen = true
@@ -101,7 +153,7 @@ class CalculatorButtonsAdapter(
         }
     }
 
-    private fun openParanthesisCheck() {
+    private fun openParenthesisCheck() {
         if (isBracketOpen) {
             mEquationValue.append(")")
             updateOpenBracketsCount()
